@@ -110,7 +110,7 @@ function startup@PROJECT_NAME@(debug)
     end
 
     %Load dependency startup.m files
-    dependent_startup_m_locations = strsplit('@_DEPENDENT_STARTUP_M_LOCATIONS@',';');
+    dependent_startup_m_locations = strsplit('@_DEPENDENCY_STARTUP_M_LOCATIONS@',';');
     dependent_startup_m_locations(cellfun(@isempty,dependent_startup_m_locations)) = []; %Remove empty cells
     if ~isempty(dependent_startup_m_locations)
         for location_idx = dependent_startup_m_locations

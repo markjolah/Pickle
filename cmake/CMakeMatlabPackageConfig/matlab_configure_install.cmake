@@ -5,7 +5,7 @@
 #
 # Sets up a ${PACKAGE_NAME}config-matlab.cmake file for passing Matlab configuration to dependencies via the CMake packaging system.
 # Installs Matlab code and startup${PACKAGE_NAME}.m file for Matlab integration, which is able to run dependent startup.m file
-# from DEPENDENT_STARTUP_M_LOCATIONS
+# from DEPENDENCY_STARTUP_M_LOCATIONS
 #
 # Configures a build-tree export which enables editing of the sources .m files in-repository. [EXPORT_BUILD_TREE True]
 #
@@ -25,7 +25,7 @@
 #  EXPORT_BUILD_TREE - bool. [optional] [Default: False] - Enable the export of the build tree. And configuration of startup<PACKAGE_NAME>.cmake
 #                        script that can be used from the build tree.  For development.
 # Multi-Argument Keywords:
-#  DEPENDENT_STARTUP_M_LOCATIONS - Paths for .m files that this package depends on.  Should be relative to CMAKE_INSTALL_PREFIX,
+#  DEPENDENCY_STARTUP_M_LOCATIONS - Paths for .m files that this package depends on.  Should be relative to CMAKE_INSTALL_PREFIX,
 #                                  or absolute for files outside the install prefix
 #
 # Controlling CMake option variables (these are CMake variables not parsed function arguments):
@@ -39,7 +39,7 @@ function(matlab_configure_install)
     set(oneValueArgs CONFIG_DIR PACKAGE_CONFIG_TEMPLATE PACKAGE_CONFIG_MATLAB_TEMPLATE CONFIG_INSTALL_DIR
                      MATLAB_SRC_DIR STARTUP_M_TEMPLATE STARTUP_M_FILE
                      MATLAB_CODE_INSTALL_DIR EXPORT_BUILD_TREE)
-    set(multiValueArgs DEPENDENT_STARTUP_M_LOCATIONS)
+    set(multiValueArgs DEPENDENCY_STARTUP_M_LOCATIONS)
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}"  ${ARGN})
     if(ARG_UNPARSED_ARGUMENTS)
         message(FATAL_ERROR "Unknown keywords given to install_smarter_package_version_file(): \"${_SVF_UNPARSED_ARGUMENTS}\"")
@@ -100,10 +100,10 @@ function(matlab_configure_install)
     if(NOT ARG_BUILD_TREE_STARTUP_M_LOCATION)
         set(ARG_BUILD_TREE_STARTUP_M_LOCATION ${CMAKE_BINARY_DIR}/startup${PACKAGE_NAME}.m)
     endif()
-    if(NOT ARG_DEPENDENT_STARTUP_M_LOCATIONS)
-        set(ARG_DEPENDENT_STARTUP_M_LOCATIONS)
+    if(NOT ARG_DEPENDENCY_STARTUP_M_LOCATIONS)
+        set(ARG_DEPENDENCY_STARTUP_M_LOCATIONS)
     endif()
-    list(APPEND ARG_DEPENDENT_STARTUP_M_LOCATIONS ${MexIFace_MATLAB_STARTUP_M})
+    list(APPEND ARG_DEPENDENCY_STARTUP_M_LOCATIONS ${MexIFace_MATLAB_STARTUP_M})
 
     # Set different names for build-tree and install-tree files
     set(ARG_PACKAGE_CONFIG_FILE ${PROJECT_NAME}Config-matlab.cmake)
@@ -141,7 +141,7 @@ function(matlab_configure_install)
         set(ABSOLUTE_CONFIG_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/${ARG_CONFIG_INSTALL_DIR})
     endif()
     set(_MATLAB_CODE_DIR ${ARG_MATLAB_CODE_INSTALL_DIR}) #Set relative to install prefix for configure_package_config_file
-    set(_MATLAB_STARTUP_M ${ARG_CONFIG_DIR}/${STARTUP_M_FILE})
+    set(_MATLAB_STARTUP_M ${ARG_MATLAB_CODE_INSTALL_DIR}/${STARTUP_M_FILE})
     configure_package_config_file(${ARG_PACKAGE_CONFIG_MATLAB_TEMPLATE} ${ARG_CONFIG_DIR}/${ARG_PACKAGE_CONFIG_INSTALL_TREE_FILE}
                                     INSTALL_DESTINATION ${ARG_CONFIG_INSTALL_DIR}
                                     PATH_VARS _MATLAB_CODE_DIR _MATLAB_STARTUP_M
@@ -153,12 +153,12 @@ function(matlab_configure_install)
     set(_MATLAB_CODE_DIR ".") # Relative to startup<PACKAGE_NAME>.m file startup.m
     set(_STARTUP_M_INSTALL_DIR ${ARG_MATLAB_CODE_INSTALL_DIR}) #Install dir relative to install prefix
     #Remap install time dependent startup.m locations to be relative to startup@PACKAGE_NAME@.m location
-    set(_DEPENDENT_STARTUP_M_LOCATIONS)
-    message("GOT ARG_DEPENDENT_STARTUP_M_LOCATIONS:${ARG_DEPENDENT_STARTUP_M_LOCATIONS}")
+    set(_DEPENDENCY_STARTUP_M_LOCATIONS)
+    message("GOT ARG_DEPENDENCY_STARTUP_M_LOCATIONS:${ARG_DEPENDENCY_STARTUP_M_LOCATIONS}")
     file(RELATIVE_PATH _install_rpath "/${ARG_MATLAB_CODE_INSTALL_DIR}" "/")
-    foreach(location IN LISTS ARG_DEPENDENT_STARTUP_M_LOCATIONS)
+    foreach(location IN LISTS ARG_DEPENDENCY_STARTUP_M_LOCATIONS)
         string(REGEX REPLACE "^${CMAKE_INSTALL_PREFIX}/" "${_install_rpath}" location ${location})
-        list(APPEND _DEPENDENT_STARTUP_M_LOCATIONS ${location})
+        list(APPEND _DEPENDENCY_STARTUP_M_LOCATIONS ${location})
     endforeach()
     configure_file(${ARG_STARTUP_M_TEMPLATE} ${ARG_CONFIG_DIR}/${ARG_STARTUP_M_INSTALL_TREE_FILE})
     install(FILES ${ARG_CONFIG_DIR}/${ARG_STARTUP_M_INSTALL_TREE_FILE} RENAME ${ARG_STARTUP_M_FILE}
@@ -186,10 +186,10 @@ function(matlab_configure_install)
         #startup.m build-tree
         set(_STARTUP_M_INSTALL_DIR) #Set to empty in build tree export to signal to startup.m that it is run from build tree
         #Remap build time dependent startup.m locations to be relative to startup@PACKAGE_NAME@.m location
-        set(_DEPENDENT_STARTUP_M_LOCATIONS)
-        foreach(location IN LISTS ARG_DEPENDENT_STARTUP_M_LOCATIONS)
+        set(_DEPENDENCY_STARTUP_M_LOCATIONS)
+        foreach(location IN LISTS ARG_DEPENDENCY_STARTUP_M_LOCATIONS)
             file(RELATIVE_PATH location ${CMAKE_BINARY_DIR} ${location})
-            list(APPEND _DEPENDENT_STARTUP_M_LOCATIONS ${location})
+            list(APPEND _DEPENDENCY_STARTUP_M_LOCATIONS ${location})
         endforeach()
         configure_file(${ARG_STARTUP_M_TEMPLATE} ${ARG_CONFIG_DIR}/${ARG_STARTUP_M_FILE})
     endif()

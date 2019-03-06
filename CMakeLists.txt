@@ -21,7 +21,7 @@ message(STATUS "OPTION: OPT_INSTALL_TESTING: ${OPT_INSTALL_TESTING}")
 message(STATUS "OPTION: OPT_EXPORT_BUILD_TREE: ${OPT_EXPORT_BUILD_TREE}")
 message(STATUS "OPTION: OPT_MATLAB_INSTALL_DISTRIBUTION_STARTUP: ${OPT_MATLAB_INSTALL_DISTRIBUTION_STARTUP}")
 
+#Install matlab code, configure and install startup${PROJECT_NAME}.m and CMake Package Config files
 include(${CMAKE_SOURCE_DIR}/cmake/CMakeMatlabPackageConfig/matlab_configure_install.cmake)
-
 matlab_configure_install(PACKAGE_CONFIG_TEMPLATE "cmake/Templates/PackageConfig.cmake.in")
 
