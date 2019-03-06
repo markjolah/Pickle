@@ -1,0 +1,10 @@
+@PACKAGE_INIT@
+
+# PickleConfig.cmake
+# Sets:
+# @PROJECT_NAME@_MATLAB_CODE_DIR - Matlab code directory
+# @PROJECT_NAME@_MATLAB_STARTUP_M - Matlab startup@PROJECT_NAME@.m
+
+#Load Matlab configurations
+set_and_check(Matlab_CONFIG_FILE ${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Config-matlab.cmake)
+include(${Matlab_CONFIG_FILE})
