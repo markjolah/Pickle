@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/markjolah/CMakeMatlabPackageConfig
+	branch = master
+	commit = 4ed6e5b95abcfacfe397e0f3fa2996599da3330c
+	parent = a0e72372a80bed97e42f8e8d5eaacf648a212a0b
+	method = merge
+	cmdver = 0.4.0
