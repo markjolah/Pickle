@@ -141,7 +141,7 @@ function(matlab_configure_install)
         set(ABSOLUTE_CONFIG_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/${ARG_CONFIG_INSTALL_DIR})
     endif()
     set(_MATLAB_CODE_DIR ${ARG_MATLAB_CODE_INSTALL_DIR}) #Set relative to install prefix for configure_package_config_file
-    set(_MATLAB_STARTUP_M ${ARG_MATLAB_CODE_INSTALL_DIR}/${STARTUP_M_FILE})
+    set(_MATLAB_STARTUP_M ${ARG_MATLAB_CODE_INSTALL_DIR}/${ARG_STARTUP_M_FILE})
     configure_package_config_file(${ARG_PACKAGE_CONFIG_MATLAB_TEMPLATE} ${ARG_CONFIG_DIR}/${ARG_PACKAGE_CONFIG_INSTALL_TREE_FILE}
                                     INSTALL_DESTINATION ${ARG_CONFIG_INSTALL_DIR}
                                     PATH_VARS _MATLAB_CODE_DIR _MATLAB_STARTUP_M

@@ -84,9 +84,6 @@ function startup@PROJECT_NAME@(debug)
             all_path_dirs(end)=[];
         end
         package_install_prefix = strjoin(all_path_dirs,filesep());
-        if isempty(all_path_dirs{1})
-            package_install_prefix = ['/', package_install_prefix]; %On unix
-        end
     end
 
     if ~exist(package_install_prefix,'dir')

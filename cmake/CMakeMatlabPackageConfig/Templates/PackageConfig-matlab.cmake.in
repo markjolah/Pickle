@@ -4,10 +4,10 @@
 # Enable use of the Matlab MexIFace modules of @PROJECT_NAME@ to be found and used by downstream MexIFace
 # packages, by exporting Matlab compatibility information.
 #
-# Note the this code must be explicitly called from  @PACKAGE_NAME@Config.cmake.in, e.g.:
+# Note the this code must be explicitly called from  @PROJECT_NAME@Config.cmake.in, e.g.:
 # ```
-#     set_and_check(MexIFace_CONFIG_FILE ${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Config-matlab.cmake)
-#     include(${MexIFace_CONFIG_FILE})
+# set_and_check(Matlab_CONFIG_FILE ${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Config-matlab.cmake)
+# include(${Matlab_CONFIG_FILE})
 # ```
 
 set_and_check(@PROJECT_NAME@_MATLAB_CODE_DIR @PACKAGE__MATLAB_CODE_DIR@)
